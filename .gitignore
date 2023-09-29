@@ -1,0 +1,32 @@
+# Ignore debug logs
+DEBUG LOGs/
+
+# Ignore Node.js modules
+node_modules/
+
+# Ignore old database files
+old dbs/
+
+# Ignore output files
+output/
+
+# Ignore screenshot files
+screenshot/
+
+# Ignore database files with the extension .db
+*.db
+
+# Ignore log files
+*.log
+
+# Ignore out files
+*.out
+
+# Ignore package lock file
+package-lock.json
+
+# Ignore text files
+*.txt
+
+# Ignore USER_DIR directory
+USER_DIR/
