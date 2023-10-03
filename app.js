@@ -48,8 +48,30 @@ async function scrapeProductData(url) {
       "--flag-switches-begin",
       "--flag-switches-end",
       "--disable-nacl",
+      '--disable-breakpad',
       `--load-extension=/home/puppeteer/extension`,
-      '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+      '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+      // disable images
+      '--blink-settings=imagesEnabled=false',
+      // disable chrome crash reporting
+      '--disable-component-update',
+      '--disable-default-apps',
+      '--disable-domain-reliability',
+      '--disable-gpu',
+      '--disable-hang-monitor',
+      '--disable-infobars',
+      '--disable-notifications',
+      '--disable-offer-store-unmasked-wallet-cards',
+      '--disable-offer-upload-credit-cards',
+      '--disable-popup-blocking',
+      '--disable-print-preview',
+      '--disable-prompt-on-repost',
+      '--disable-setuid-sandbox',
+      '--disable-speech-api',
+      '--disable-sync',
+      '--hide-scrollbars',
+      
+      
     ],
   });
 
@@ -83,9 +105,13 @@ async function scrapeProductData(url) {
     if (!product_name_text) {
       logger.error(`${req_id} | Failed to get product name\n`);
       await page.screenshot({ path: `/home/puppeteer/screenshot/${req_id}_product_name.png`, fullPage: true });
+      // throw new Error("Failed to get product name");
+      throw new Error("Failed to get product name!");
+   
+
     }
 
-    let cat_id_text = cat_id_ = itemid = null;
+    let cat_id_text, cat_id_, itemid = null;
     try {
       cat_id_text = await page.evaluate(() => {
         const anchors = document.querySelector("a.W0LQye")?.href;
@@ -94,10 +120,10 @@ async function scrapeProductData(url) {
     } catch (e) {
       logger.error(`${req_id} | Failed to get category id\n`);
     }
-    if (cat_id_text !== null) {}
-    else {
-   cat_id_ = extractCategoryId(cat_id_text);
-    itemid = extractItemId(cat_id_text);
+    
+    if (cat_id_text !== null) {
+      cat_id_ = extractCategoryId(cat_id_text);
+      itemid = extractItemId(cat_id_text);
     }
     const price_text = await waitForElementWithTimeout(page, "div.pqTWkA", 10000);
     let sold_text = await waitForElementWithTimeout(page, "div.P3CdcB", 10000);
@@ -196,6 +222,8 @@ async function waitForElementWithTimeout(page, selector, timeout) {
   }
 }
 
+
+
 function extractCategoryId(url) {
   const categoryIdMatch = url.match(/categoryId=([0-9]+)/);
   return categoryIdMatch ? parseInt(categoryIdMatch[1]) : null;
@@ -205,6 +233,7 @@ function extractItemId(url) {
   const itemIdMatch = url.match(/itemId=([0-9]+)/);
   return itemIdMatch ? parseInt(itemIdMatch[1]) : null;
 }
+
 
 // process.on('unhandledRejection', (reason, promise) => {
 //   console.error('Unhandled Rejection at:', promise, 'reason:', reason);

@@ -30,3 +30,9 @@ package-lock.json
 
 # Ignore USER_DIR directory
 USER_DIR/
+
+# json files
+*.json
+
+# zip files
+*.zip

@@ -157,7 +157,7 @@ def scrape_data(ip_url,retry_count=0,login_count=0,req_id=None):
         logging.info(f"{'*' * 50} \n\n")
 
     except Exception as e:
-        logging.error(f"somthing went wrong index: {arr.index(i)+1}| error: {e}")
+        logging.error(f"somthing went wrong index: {arr.index(ip_url)+1}| error: {e}")
         logging.warning(output)
    
     control[control.index(True)] = False
